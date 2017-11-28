@@ -1,21 +1,21 @@
 /*
- * This file is part of SpongePaper.
+ * This file is part of PaperSponge.
  *
- * SpongePaper is free software: you can redistribute it and/or modify
+ * PaperSponge is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * SpongePaper is distributed in the hope that it will be useful,
+ * PaperSponge is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with SpongePaper.  If not, see <http://www.gnu.org/licenses/>.
+ * along with PaperSponge.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.destroystokyo.spongepaper
+package com.destroystokyo.papersponge
 
 import com.google.inject.Inject
 import org.slf4j.Logger
@@ -30,8 +30,8 @@ import org.spongepowered.api.text.Text
 import org.spongepowered.api.text.format.TextColors
 import org.spongepowered.api.text.format.TextStyles
 
-@Plugin(id = "spongepaper", name = "SpongePaper", url = "https://github.com/zachbr/SpongePaper")
-class SpongePaper {
+@Plugin(id = "papersponge", name = "PaperSponge", url = "https://github.com/zachbr/PaperSponge")
+class PaperSponge {
 
     @Inject private lateinit var logger: Logger
     @Inject private lateinit var game: Game
