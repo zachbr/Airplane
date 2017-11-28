@@ -1,0 +1,45 @@
+buildscript {
+    ext.kotlin_version = '1.2.0'
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+plugins {
+    id 'org.spongepowered.plugin' version '0.8.1'
+    id 'net.minecrell.licenser' version '0.3'
+}
+
+group = pluginGroup
+version = pluginVersion
+
+dependencies {
+compile 'org.spongepowered:spongeapi:7.0.0-SNAPSHOT'
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+}
+
+sponge.plugin.id = pluginId
+apply plugin: 'kotlin'
+
+repositories {
+    mavenCentral()
+}
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+compileTestKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+
+// updateLicenses || checkLicenses
+license {
+    ext.name = 'SpongePaper'
+    header = project.file('HEADER.txt')
+}
