@@ -18,11 +18,8 @@
 package com.destroystokyo.spongepaper
 
 import com.google.inject.Inject
-import ninja.leaping.configurate.commented.CommentedConfigurationNode
-import ninja.leaping.configurate.loader.ConfigurationLoader
 import org.slf4j.Logger
 import org.spongepowered.api.Game
-import org.spongepowered.api.config.DefaultConfig
 import org.spongepowered.api.entity.living.player.Player
 import org.spongepowered.api.event.Listener
 import org.spongepowered.api.event.filter.Getter
@@ -37,9 +34,7 @@ import org.spongepowered.api.text.format.TextStyles
 class SpongePaper {
 
     @Inject private lateinit var logger: Logger
-    @Inject @DefaultConfig(sharedRoot = true) private lateinit var configLoader: ConfigurationLoader<CommentedConfigurationNode>
     @Inject private lateinit var game: Game
-
 
     @Listener
     fun onServerStart(event: GameStartedServerEvent) {

@@ -2,31 +2,42 @@ buildscript {
     ext.kotlin_version = '1.2.0'
     repositories {
         mavenCentral()
+        jcenter()
     }
+
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.1'
     }
 }
 
 plugins {
+    id "org.jetbrains.kotlin.jvm" version "1.2.0"
     id 'org.spongepowered.plugin' version '0.8.1'
+    id 'com.github.johnrengelman.shadow' version '2.0.1'
     id 'net.minecrell.licenser' version '0.3'
 }
 
 group = pluginGroup
 version = pluginVersion
-
-dependencies {
-compile 'org.spongepowered:spongeapi:7.0.0-SNAPSHOT'
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-}
-
 sponge.plugin.id = pluginId
-apply plugin: 'kotlin'
+
+jar.enabled = false
+build.dependsOn(shadowJar)
+
+sourceSets {
+    main.java.srcDirs += 'src/main/kotlin'
+}
 
 repositories {
     mavenCentral()
 }
+
+dependencies {
+    compile 'org.spongepowered:spongeapi:7.0.0-SNAPSHOT'
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+}
+
 compileKotlin {
     kotlinOptions {
         jvmTarget = "1.8"
@@ -36,6 +47,18 @@ compileTestKotlin {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+}
+
+artifacts {
+    shadowJar
+}
+
+shadowJar {
+    dependencies {
+        include dependency('org.jetbrains.kotlin:kotlin-stdlib')
+    }
+
+    relocate 'kotlin', 'com.destroystokyo.spongepaper.libs.kotlin'
 }
 
 // updateLicenses || checkLicenses
