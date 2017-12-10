@@ -18,6 +18,7 @@
 package com.destroystokyo.papersponge
 
 import com.destroystokyo.papersponge.modules.AquaticMobSpawns
+import com.destroystokyo.papersponge.modules.DropFallingBlocks
 import com.destroystokyo.papersponge.modules.NetherRoofDamage
 import com.google.inject.Inject
 import org.slf4j.Logger
@@ -53,6 +54,7 @@ class PaperSponge {
     private fun registerListeners() {
         game.eventManager.registerListeners(this, AquaticMobSpawns())
         game.eventManager.registerListeners(this, NetherRoofDamage(this))
+        game.eventManager.registerListeners(this, DropFallingBlocks())
     }
 
 }
