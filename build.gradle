@@ -54,11 +54,14 @@ artifacts {
 }
 
 shadowJar {
+    classifier = null
+
     dependencies {
         include dependency('org.jetbrains.kotlin:kotlin-stdlib')
     }
 
     relocate 'kotlin', 'com.destroystokyo.papersponge.libs.kotlin'
+    from 'LICENSE.md'
 }
 
 // updateLicenses || checkLicenses
