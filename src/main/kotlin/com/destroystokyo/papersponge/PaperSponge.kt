@@ -17,8 +17,8 @@
 
 package com.destroystokyo.papersponge
 
-import com.destroystokyo.papersponge.modules.aquaticmobspawns.AquaticMobSpawns
-import com.destroystokyo.papersponge.modules.netherroofdamage.NetherRoofDamage
+import com.destroystokyo.papersponge.modules.AquaticMobSpawns
+import com.destroystokyo.papersponge.modules.NetherRoofDamage
 import com.google.inject.Inject
 import org.slf4j.Logger
 import org.spongepowered.api.Game
@@ -35,11 +35,8 @@ class PaperSponge {
 
     @Listener
     fun onServerStart(event: GameStartedServerEvent) {
-        // Hey! The server has started!
         logger.info("Enabling PaperSponge")
         registerListeners()
-        // Try loading some configuration settings for a welcome message to players
-        // when they join!
     }
 
     @Listener

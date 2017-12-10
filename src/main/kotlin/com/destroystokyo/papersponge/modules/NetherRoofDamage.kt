@@ -15,7 +15,7 @@
  * along with PaperSponge.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.destroystokyo.papersponge.modules.netherroofdamage
+package com.destroystokyo.papersponge.modules
 
 import com.destroystokyo.papersponge.PaperSponge
 import com.destroystokyo.papersponge.modules.util.getEntity
@@ -145,8 +145,6 @@ class NetherRoofDamage(instance: PaperSponge) {
                 }
 
                 val entity = opt.get()
-                println(entity.uniqueId)
-
                 if (shouldDamage(entity.location)) {
                     damage(entity)
                 } else {

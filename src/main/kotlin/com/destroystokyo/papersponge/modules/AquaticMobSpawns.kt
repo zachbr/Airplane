@@ -15,7 +15,7 @@
  * along with PaperSponge.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.destroystokyo.papersponge.modules.aquaticmobspawns
+package com.destroystokyo.papersponge.modules
 
 import org.spongepowered.api.block.BlockTypes
 import org.spongepowered.api.entity.Entity
@@ -34,20 +34,23 @@ class AquaticMobSpawns {
 
     @Listener
     fun onMobSpawn(event: SpawnEntityEvent.Spawner) {
-        event.filterEntities(aquaticInWater)
+        event.filterEntities(entityCanSpawnHere)
     }
 
     /**
-     * Checks if the entity is an aquatic type out of water
+     * Checks if the entity can spawn
+     * Given this module, we really only care about the Aquatic types
      *
      * If it's not an aquatic type it will always return true
      * If the aquatic type is in water it will return true
      */
-    private val aquaticInWater = Predicate { e: Entity ->
+    private val entityCanSpawnHere = Predicate { e: Entity ->
         if (e is Aquatic) {
+            // If the entity is an aquatic type, make sure they're spawning in water, if not we need to return false
             val type = e.location.blockType
             return@Predicate type === BlockTypes.FLOWING_WATER || type === BlockTypes.WATER
         } else {
+            // If they aren't, assume they can stay and return true
             return@Predicate true
         }
     }
