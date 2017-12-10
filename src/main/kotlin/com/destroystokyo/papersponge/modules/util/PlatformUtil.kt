@@ -25,14 +25,7 @@ import java.util.*
  * Gets an entity from the server via its a UUID
  */
 fun getEntity(uuid: UUID): Optional<Entity> {
-    for (world in Sponge.getGame().server.worlds) {
-        val opt = world.getEntity(uuid)
-
-        if (opt.isPresent) {
-            return opt
-        }
-    }
-
-    return Optional.empty()
+    val entity: Optional<Entity>? = Sponge.getGame().server.worlds.map { it.getEntity(uuid) }.firstOrNull { it.isPresent }
+    return entity ?: Optional.empty()
 }
 

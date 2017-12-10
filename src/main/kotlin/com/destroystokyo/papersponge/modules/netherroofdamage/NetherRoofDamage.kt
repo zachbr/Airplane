@@ -56,45 +56,12 @@ class NetherRoofDamage(instance: PaperSponge) {
     private val awaitingAdd = HashSet<UUID>()
 
     init {
-        val damageRunnable = java.lang.Runnable {
-            entitiesOnNetherRoof += awaitingAdd
-            awaitingAdd.clear()
-
-            val iterator = entitiesOnNetherRoof.iterator()
-            while (iterator.hasNext()) {
-                val uuid = iterator.next()
-                val opt = getEntity(uuid)
-
-                if (!opt.isPresent) {
-                    iterator.remove()
-                    continue
-                }
-
-                val entity = opt.get()
-                println(entity.uniqueId)
-
-                if (shouldDamage(entity.location)) {
-                    damage(entity)
-                } else {
-                    iterator.remove()
-                }
-            }
-        }
-
-        Task.builder()
-                .interval(1, TimeUnit.SECONDS)
-                .execute(damageRunnable)
-                .name("PaperSponge - Nether Roof Damage Task")
-                .submit(instance)
+        submitRunnable(instance)
     }
 
     @Listener
     fun onEntitySpawn(event: SpawnEntityEvent, @Getter("getEntities") entities: List<Entity>) {
-        for (entity in entities) {
-            if (shouldDamage(entity.location)) {
-                awaitingAdd.add(entity.uniqueId)
-            }
-        }
+        entities.filter { shouldDamage(it.location) }.mapTo(awaitingAdd) { it.uniqueId }
     }
 
     @Listener
@@ -157,5 +124,41 @@ class NetherRoofDamage(instance: PaperSponge) {
         val newZ = newLoc.blockZ
 
         return oldX != newX || oldY != newY || oldZ != newZ
+    }
+
+    /**
+     * Creates and submits our damage runnable
+     */
+    private fun submitRunnable(instance: PaperSponge) {
+        val damageRunnable = java.lang.Runnable {
+            entitiesOnNetherRoof += awaitingAdd
+            awaitingAdd.clear()
+
+            val iterator = entitiesOnNetherRoof.iterator()
+            while (iterator.hasNext()) {
+                val uuid = iterator.next()
+                val opt = getEntity(uuid)
+
+                if (!opt.isPresent) {
+                    iterator.remove()
+                    continue
+                }
+
+                val entity = opt.get()
+                println(entity.uniqueId)
+
+                if (shouldDamage(entity.location)) {
+                    damage(entity)
+                } else {
+                    iterator.remove()
+                }
+            }
+        }
+
+        Task.builder()
+                .interval(1, TimeUnit.SECONDS)
+                .execute(damageRunnable)
+                .name("PaperSponge - Nether Roof Damage Task")
+                .submit(instance)
     }
 }
