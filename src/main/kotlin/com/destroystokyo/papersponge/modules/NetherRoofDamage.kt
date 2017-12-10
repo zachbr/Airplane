@@ -18,6 +18,7 @@
 package com.destroystokyo.papersponge.modules
 
 import com.destroystokyo.papersponge.PaperSponge
+import com.destroystokyo.papersponge.modules.base.ModuleBase
 import com.destroystokyo.papersponge.modules.util.getEntity
 import org.spongepowered.api.entity.Entity
 import org.spongepowered.api.entity.Transform
@@ -41,7 +42,11 @@ import kotlin.collections.HashSet
  *
  * This will damage them as if they were in the void below the map
  */
-class NetherRoofDamage(instance: PaperSponge) {
+class NetherRoofDamage(instance: PaperSponge) : ModuleBase("Entity Nether Roof Damager", instance) {
+    override fun shouldEnable(): Boolean {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
     /**
      * Damage source to use for all entity damage calls
      */

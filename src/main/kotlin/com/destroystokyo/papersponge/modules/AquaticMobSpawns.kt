@@ -17,6 +17,8 @@
 
 package com.destroystokyo.papersponge.modules
 
+import com.destroystokyo.papersponge.PaperSponge
+import com.destroystokyo.papersponge.modules.base.ModuleBase
 import org.spongepowered.api.block.BlockTypes
 import org.spongepowered.api.entity.Entity
 import org.spongepowered.api.entity.living.Aquatic
@@ -30,7 +32,10 @@ import java.util.function.Predicate
  *
  * Usually as a result of a mob spawner, but rarely as a natural spawn
  */
-class AquaticMobSpawns {
+class AquaticMobSpawns(instance: PaperSponge) : ModuleBase("Aquatic Mob Spawns", instance) {
+    override fun shouldEnable(): Boolean {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
     @Listener
     fun onMobSpawn(event: SpawnEntityEvent.Spawner) {

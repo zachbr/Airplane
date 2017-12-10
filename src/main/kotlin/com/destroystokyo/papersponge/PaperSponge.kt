@@ -31,7 +31,7 @@ import org.spongepowered.api.plugin.Plugin
 @Plugin(id = "papersponge", name = "PaperSponge", url = "https://github.com/zachbr/PaperSponge")
 class PaperSponge {
 
-    @Inject private lateinit var logger: Logger
+    @Inject internal lateinit var logger: Logger
     @Inject private lateinit var game: Game
 
     @Listener
@@ -52,9 +52,9 @@ class PaperSponge {
      * // TODO Make config driven
      */
     private fun registerListeners() {
-        game.eventManager.registerListeners(this, AquaticMobSpawns())
+        game.eventManager.registerListeners(this, AquaticMobSpawns(this))
         game.eventManager.registerListeners(this, NetherRoofDamage(this))
-        game.eventManager.registerListeners(this, DropFallingBlocks())
+        game.eventManager.registerListeners(this, DropFallingBlocks(this))
     }
 
 }

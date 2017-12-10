@@ -17,6 +17,8 @@
 
 package com.destroystokyo.papersponge.modules
 
+import com.destroystokyo.papersponge.PaperSponge
+import com.destroystokyo.papersponge.modules.base.ModuleBase
 import org.spongepowered.api.data.key.Keys
 import org.spongepowered.api.entity.Entity
 import org.spongepowered.api.entity.EntityTypes
@@ -30,16 +32,19 @@ import org.spongepowered.api.item.ItemTypes
 import org.spongepowered.api.item.inventory.ItemStack
 import org.spongepowered.api.world.World
 
-class DropFallingBlocks {
+/**
+ * Removes falling blocks and primed TNT entities from the server once they
+ * reach the specified height.
+ *
+ * Commonly used in TNT cannon servers to nerf certain types of cannons
+ */
+class DropFallingBlocks(instanceIn: PaperSponge) : ModuleBase("Falling Block Killer", instanceIn) {
+    override fun shouldEnable(): Boolean {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
-    /**
-     * Block Y level at which we remove the entity and drop whatever the block was
-     */
-    private val maximumYLoc = 100 // TODO make configurable
-    /**
-     * Whether or not we should drop the item that the entity represents
-     */
-    private val shouldDropItem = true // TODO make configurable
+    private val maximumYLoc = 100 // TODO - Config Driven
+    private val shouldDropItem = true // TODO - Config Driven
 
     @Listener
     fun onEntityMove(event: MoveEntityEvent, @Getter("getTargetEntity") entity: Entity) {
