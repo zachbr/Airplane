@@ -20,8 +20,8 @@ package com.destroystokyo.papersponge.modules
 import com.destroystokyo.papersponge.PaperSponge
 import com.destroystokyo.papersponge.modules.base.ModuleBase
 import com.destroystokyo.papersponge.modules.util.getEntity
+import com.destroystokyo.papersponge.modules.util.movedBlockXYZ
 import org.spongepowered.api.entity.Entity
-import org.spongepowered.api.entity.Transform
 import org.spongepowered.api.entity.living.Living
 import org.spongepowered.api.event.Listener
 import org.spongepowered.api.event.cause.entity.damage.DamageTypes
@@ -104,31 +104,6 @@ class NetherRoofDamage(instance: PaperSponge) : ModuleBase("Entity Nether Roof D
         }
 
         return loc.y >= 128
-    }
-
-    /**
-     * Gets whether the specified transforms represent a complete block level movement
-     */
-    private fun movedBlockXYZ(oldTransform: Transform<World>, newTransform: Transform<World>): Boolean {
-        if (!oldTransform.isValid || !newTransform.isValid) {
-            return false
-        }
-
-        return movedBlockXYZ(oldTransform.location, newTransform.location)
-    }
-
-    /**
-     * Gets whether the specified locations represent a complete block level movement
-     */
-    private fun movedBlockXYZ(oldLoc: Location<World>, newLoc: Location<World>): Boolean {
-        val oldX = oldLoc.blockX
-        val oldY = oldLoc.blockY
-        val oldZ = oldLoc.blockZ
-        val newX = newLoc.blockX
-        val newY = newLoc.blockY
-        val newZ = newLoc.blockZ
-
-        return oldX != newX || oldY != newY || oldZ != newZ
     }
 
     /**

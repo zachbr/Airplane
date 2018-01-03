@@ -32,7 +32,7 @@ import java.util.function.Predicate
  *
  * Usually as a result of a mob spawner, but rarely as a natural spawn
  */
-class AquaticMobSpawns(instance: PaperSponge) : ModuleBase("Aquatic Mob Spawns", instance) {
+class AquaticMobSpawns(instance: PaperSponge) : ModuleBase("Stricter Aquatic Mob Spawns", instance) {
     override fun shouldEnable(): Boolean {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }

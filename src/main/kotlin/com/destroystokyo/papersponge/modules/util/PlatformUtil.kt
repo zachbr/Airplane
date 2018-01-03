@@ -19,6 +19,9 @@ package com.destroystokyo.papersponge.modules.util
 
 import org.spongepowered.api.Sponge
 import org.spongepowered.api.entity.Entity
+import org.spongepowered.api.entity.Transform
+import org.spongepowered.api.world.Location
+import org.spongepowered.api.world.World
 import java.util.*
 
 /**
@@ -27,5 +30,30 @@ import java.util.*
 fun getEntity(uuid: UUID): Optional<Entity> {
     val entity: Optional<Entity>? = Sponge.getGame().server.worlds.map { it.getEntity(uuid) }.firstOrNull { it.isPresent }
     return entity ?: Optional.empty()
+}
+
+/**
+ * Gets whether the specified transforms represent a complete block level movement
+ */
+fun movedBlockXYZ(oldTransform: Transform<World>, newTransform: Transform<World>): Boolean {
+    if (!oldTransform.isValid || !newTransform.isValid) {
+        return false
+    }
+
+    return movedBlockXYZ(oldTransform.location, newTransform.location)
+}
+
+/**
+ * Gets whether the specified locations represent a complete block level movement
+ */
+fun movedBlockXYZ(oldLoc: Location<World>, newLoc: Location<World>): Boolean {
+    val oldX = oldLoc.blockX
+    val oldY = oldLoc.blockY
+    val oldZ = oldLoc.blockZ
+    val newX = newLoc.blockX
+    val newY = newLoc.blockY
+    val newZ = newLoc.blockZ
+
+    return oldX != newX || oldY != newY || oldZ != newZ
 }
 

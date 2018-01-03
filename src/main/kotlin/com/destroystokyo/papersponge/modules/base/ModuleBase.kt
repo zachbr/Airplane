@@ -27,12 +27,10 @@ abstract class ModuleBase(moduleNameIn: String, instanceIn: PaperSponge) {
 
     abstract fun shouldEnable(): Boolean
 
-    fun register() {
-        if (!shouldEnable()) {
-            return
-        }
-
+    fun registerModule() {
         logger.info("Enabling " + moduleName)
         Sponge.getEventManager().registerListeners(pluginInstance, this)
     }
+
+    fun getSerializedName() = this.moduleName.replace(' ', '-')
 }

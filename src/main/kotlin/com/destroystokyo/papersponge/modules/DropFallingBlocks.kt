@@ -57,9 +57,9 @@ class DropFallingBlocks(instanceIn: PaperSponge) : ModuleBase("Falling Block Kil
         }
 
         if (event.toTransform.location.blockY >= maximumYLoc) {
-            var item: ItemStack? = null
-
             if (shouldDropItem) {
+                var item: ItemStack? = null
+
                 if (entity is FallingBlock) {
                     val opt = entity.blockState().get().type.item
                     if (opt.isPresent) {
