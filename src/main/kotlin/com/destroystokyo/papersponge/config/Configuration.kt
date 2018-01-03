@@ -18,13 +18,17 @@
 package com.destroystokyo.papersponge.config
 
 import com.destroystokyo.papersponge.PaperSponge
-import ninja.leaping.configurate.ConfigurationNode
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader
 import org.apache.commons.lang3.Validate
 import java.io.IOException
 import java.nio.file.Path
+import ninja.leaping.configurate.ConfigurationOptions
+import ninja.leaping.configurate.commented.SimpleCommentedConfigurationNode
+import ninja.leaping.configurate.commented.CommentedConfigurationNode
+import ninja.leaping.configurate.loader.HeaderMode
 
-class Configuration(pluginIn: PaperSponge, pathIn: Path?) {
+
+class Configuration(pluginIn: PaperSponge, pathIn: Path) {
 
     /**
      * The config file for use by PaperSponge
@@ -44,17 +48,20 @@ class Configuration(pluginIn: PaperSponge, pathIn: Path?) {
     /**
      * Root configuration node
      */
-    private var rootNode: ConfigurationNode? = null
+    private var rootNode: SimpleCommentedConfigurationNode? = null
 
     /**
      * Reads PaperSponge's shared configuration file
      * Must be called on enable, before modules can start reading from their nodes
      */
     internal fun readConfig(): Boolean {
-        configurationLoader = HoconConfigurationLoader.builder().setPath(configPath).build()
+        configurationLoader = HoconConfigurationLoader.builder()
+                .setPath(configPath)
+                .setHeaderMode(HeaderMode.PRESET)
+                .build()
 
         try {
-            rootNode = (configurationLoader as HoconConfigurationLoader).load()
+            rootNode = SimpleCommentedConfigurationNode.root(ConfigurationOptions.defaults().setHeader(getHeader()))
         } catch (ex: IOException) {
             pluginInstance.logger.error("Could not load PaperSponge configuration!")
             ex.printStackTrace()
@@ -83,7 +90,7 @@ class Configuration(pluginIn: PaperSponge, pathIn: Path?) {
     /**
      * Gets a child node from the root node
      */
-    internal fun getNode(vararg keys: String): ConfigurationNode {
+    internal fun getNode(vararg keys: String): CommentedConfigurationNode {
         Validate.notNull(rootNode)
 
         return rootNode!!.getNode(*keys) // assert as we just checked it, this must use the spread operator

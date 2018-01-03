@@ -18,7 +18,7 @@
 package com.destroystokyo.papersponge.modules.base
 
 import com.destroystokyo.papersponge.PaperSponge
-import ninja.leaping.configurate.ConfigurationNode
+import ninja.leaping.configurate.commented.CommentedConfigurationNode
 import org.apache.commons.lang3.Validate
 import org.spongepowered.api.Sponge
 
@@ -54,6 +54,7 @@ abstract class ModuleBase(moduleNameIn: String, instanceIn: PaperSponge) {
         val enableNode = getTopLevelModuleConfigNode().getNode("enabled")
 
         if (enableNode.isVirtual) {
+            enableNode.setComment("Controls the global on/off state of the module")
             enableNode.value = true
         }
 
@@ -98,14 +99,14 @@ abstract class ModuleBase(moduleNameIn: String, instanceIn: PaperSponge) {
      * We want the ModuleBase class to have exclusive access here so that we
      * can ensure visibility of priority nodes, ex: the enable node
      */
-    private fun getTopLevelModuleConfigNode(): ConfigurationNode {
+    private fun getTopLevelModuleConfigNode(): CommentedConfigurationNode {
         return pluginInstance.configManager!!.getNode("modules", getSerializedName()) // assert as we checked in module initialize
     }
 
     /**
      * Gets the module's configuration node
      */
-    protected fun getModuleConfigNode(): ConfigurationNode {
+    protected fun getModuleConfigNode(): CommentedConfigurationNode {
         return getTopLevelModuleConfigNode().getNode("values")
     }
 

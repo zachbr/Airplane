@@ -23,6 +23,7 @@ import com.destroystokyo.papersponge.modules.DropFallingBlocks
 import com.destroystokyo.papersponge.modules.NetherRoofDamage
 import com.destroystokyo.papersponge.modules.base.ModuleBase
 import com.google.inject.Inject
+import org.apache.commons.lang3.Validate
 import org.slf4j.Logger
 import org.spongepowered.api.Game
 import org.spongepowered.api.config.DefaultConfig
@@ -59,7 +60,8 @@ class PaperSponge {
 
         // Because we cannot lateinit the configPath, we have to assign the config manager here in server start
         // which means elvis operators all over the place :(
-        configManager = Configuration(this, configPath)
+        Validate.notNull(configPath, "Configuration path has still not been injected yet!!!")
+        configManager = Configuration(this, configPath!!) // assert, we just checked and I don't want configManager accepting null paths
         configManager?.readConfig()
 
         initializeModules()

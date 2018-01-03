@@ -49,10 +49,15 @@ class DropFallingBlocks(instanceIn: PaperSponge) : ModuleBase("Falling Block Kil
         val dropNode = moduleNode.getNode("drop-item")
 
         if (heightNode.isVirtual) {
+            val comment = "The height at which a TNT or Falling Block should be removed\n" +
+                    "Must be greater than zero!"
+            heightNode.setComment(comment)
             heightNode.value = 256
         }
 
         if (dropNode.isVirtual) {
+            val comment = "Whether or not we should drop a new item of the block when we remove it"
+            dropNode.setComment(comment)
             dropNode.value = true
         }
 
