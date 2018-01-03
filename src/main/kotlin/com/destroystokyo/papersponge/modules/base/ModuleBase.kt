@@ -28,7 +28,7 @@ abstract class ModuleBase(moduleNameIn: String, instanceIn: PaperSponge) {
      * Friendly module name, may contain spaces
      * @see getSerializedName
      */
-    private val moduleName = moduleNameIn
+    internal val moduleName = moduleNameIn
 
     /**
      * Instance of the main plugin class for use by modules
@@ -48,15 +48,14 @@ abstract class ModuleBase(moduleNameIn: String, instanceIn: PaperSponge) {
 
     /**
      * Gets whether or not this module should enable
-    */
+     */
     private fun shouldEnable(): Boolean {
         Validate.notNull(pluginInstance.configManager)
-        val enableNode = getModuleConfigNode().getNode("enabled")
+        val enableNode = getTopLevelModuleConfigNode().getNode("enabled")
 
         if (enableNode.isVirtual) {
             enableNode.value = true
         }
-
 
         return enableNode.boolean
     }
@@ -71,7 +70,7 @@ abstract class ModuleBase(moduleNameIn: String, instanceIn: PaperSponge) {
             return
         }
 
-        logger.info("Enabling " + moduleName)
+        logger.info("Enabling module " + moduleName)
         enabled = true
         Sponge.getEventManager().registerListeners(pluginInstance, this)
         onModuleEnable()
@@ -91,13 +90,23 @@ abstract class ModuleBase(moduleNameIn: String, instanceIn: PaperSponge) {
      * Gets the serialized version of this module's name
      * For use in configuration and other places where spaces would not be acceptable
      */
-    internal fun getSerializedName() = this.moduleName.replace(' ', '-')
+    internal fun getSerializedName() = this.moduleName.replace(' ', '-').toLowerCase()
+
+    /**
+     * Gets the top level of this module's config node
+     *
+     * We want the ModuleBase class to have exclusive access here so that we
+     * can ensure visibility of priority nodes, ex: the enable node
+     */
+    private fun getTopLevelModuleConfigNode(): ConfigurationNode {
+        return pluginInstance.configManager!!.getNode("modules", getSerializedName()) // assert as we checked in module initialize
+    }
 
     /**
      * Gets the module's configuration node
      */
     protected fun getModuleConfigNode(): ConfigurationNode {
-        return pluginInstance.configManager!!.getNode("modules", getSerializedName()) // assert as we checked in module initialize
+        return getTopLevelModuleConfigNode().getNode("values")
     }
 
     /**

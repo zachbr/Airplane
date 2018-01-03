@@ -40,8 +40,31 @@ import org.spongepowered.api.world.World
  */
 class DropFallingBlocks(instanceIn: PaperSponge) : ModuleBase("Falling Block Killer", instanceIn) {
 
-    private val maximumYLoc = 100 // TODO - Config Driven
-    private val shouldDropItem = true // TODO - Config Driven
+    private var maximumYLoc: Int = -1
+    private var shouldDropItem: Boolean = false
+
+    override fun onModuleEnable() {
+        val moduleNode = getModuleConfigNode()
+        val heightNode = moduleNode.getNode("maximum-height")
+        val dropNode = moduleNode.getNode("drop-item")
+
+        if (heightNode.isVirtual) {
+            heightNode.value = 256
+        }
+
+        if (dropNode.isVirtual) {
+            dropNode.value = true
+        }
+
+        maximumYLoc = heightNode.int
+        shouldDropItem = dropNode.boolean
+
+        if (maximumYLoc < 0) {
+            logger.warn(moduleName + " - maximum-height in config is too low!")
+            logger.warn(moduleName + " - It must be greater than 0! Using 256 instead.")
+            maximumYLoc = 256
+        }
+    }
 
     @Listener
     fun onEntityMove(event: MoveEntityEvent, @Getter("getTargetEntity") entity: Entity) {

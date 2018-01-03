@@ -20,7 +20,6 @@ package com.destroystokyo.papersponge.config
 import com.destroystokyo.papersponge.PaperSponge
 import ninja.leaping.configurate.ConfigurationNode
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader
-import ninja.leaping.configurate.loader.ConfigurationLoader
 import org.apache.commons.lang3.Validate
 import java.io.IOException
 import java.nio.file.Path
@@ -55,7 +54,7 @@ class Configuration(pluginIn: PaperSponge, pathIn: Path?) {
         configurationLoader = HoconConfigurationLoader.builder().setPath(configPath).build()
 
         try {
-            rootNode = (configurationLoader as ConfigurationLoader<*>).load()
+            rootNode = (configurationLoader as HoconConfigurationLoader).load()
         } catch (ex: IOException) {
             pluginInstance.logger.error("Could not load PaperSponge configuration!")
             ex.printStackTrace()
@@ -88,5 +87,17 @@ class Configuration(pluginIn: PaperSponge, pathIn: Path?) {
         Validate.notNull(rootNode)
 
         return rootNode!!.getNode(*keys) // assert as we just checked it, this must use the spread operator
+    }
+
+    /**
+     * Gets the super serious and entirely professional header for the config
+     */
+    private fun getHeader(): String {
+        return "______  ___  ______ ___________  ___________ _____ _   _ _____  _____\n" +
+                "| ___ \\/ _ \\ | ___ \\  ___| ___ \\/  ___| ___ \\  _  | \\ | |  __ \\|  ___|\n" +
+                "| |_/ / /_\\ \\| |_/ / |__ | |_/ /\\ `--.| |_/ / | | |  \\| | |  \\/| |__\n" +
+                "|  __/|  _  ||  __/|  __||    /  `--. \\  __/| | | | . ` | | __ |  __|\n" +
+                "| |   | | | || |   | |___| |\\ \\ /\\__/ / |   \\ \\_/ / |\\  | |_\\ \\| |___\n" +
+                "\\_|   \\_| |_/\\_|   \\____/\\_| \\_|\\____/\\_|    \\___/\\_| \\_/\\____/\\____/"
     }
 }
