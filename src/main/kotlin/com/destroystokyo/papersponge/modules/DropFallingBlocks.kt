@@ -19,6 +19,7 @@ package com.destroystokyo.papersponge.modules
 
 import com.destroystokyo.papersponge.PaperSponge
 import com.destroystokyo.papersponge.modules.base.ModuleBase
+import ninja.leaping.configurate.ConfigurationNode
 import org.spongepowered.api.data.key.Keys
 import org.spongepowered.api.entity.Entity
 import org.spongepowered.api.entity.EntityTypes
@@ -40,35 +41,52 @@ import org.spongepowered.api.world.World
  */
 class DropFallingBlocks(instanceIn: PaperSponge) : ModuleBase("Falling Block Killer", instanceIn) {
 
-    private var maximumYLoc: Int = -1
-    private var shouldDropItem: Boolean = false
+    private var maxTNTHeight: Int = -1
+    private var maxFallingBlockHeight: Int = -1
+    private var shouldDropTNT: Boolean = false
+    private var shouldDropFallingBlock: Boolean = false
 
     override fun onModuleEnable() {
         val moduleNode = getModuleConfigNode()
-        val heightNode = moduleNode.getNode("maximum-height")
-        val dropNode = moduleNode.getNode("drop-item")
+        val tntHeightNode = moduleNode.getNode("maximum", "tnt-height")
+        val fallingBlockHeightNode = moduleNode.getNode("maximum","falling-block-height")
+        val tntDropNode = moduleNode.getNode("drop", "tnt-items")
+        val fallingDropNode = moduleNode.getNode("drop", "falling-block-items")
 
-        if (heightNode.isVirtual) {
-            val comment = "The height at which a TNT or Falling Block should be removed\n" +
-                    "Must be greater than zero!"
-            heightNode.setComment(comment)
-            heightNode.value = 256
+        if (tntHeightNode.isVirtual) {
+            val comment = "The height at which a TNT entity should be removed\n" +
+                    "Set to 0 to disable"
+            tntHeightNode.setComment(comment)
+            tntHeightNode.value = 256
         }
 
-        if (dropNode.isVirtual) {
-            val comment = "Whether or not we should drop a new item of the block when we remove it"
-            dropNode.setComment(comment)
-            dropNode.value = true
+        if (fallingBlockHeightNode.isVirtual) {
+            val comment = "The height at which a falling block should be removed\n" +
+                    "Set to 0 to disable"
+            fallingBlockHeightNode.setComment(comment)
+            fallingBlockHeightNode.value = 256
         }
 
-        maximumYLoc = heightNode.int
-        shouldDropItem = dropNode.boolean
-
-        if (maximumYLoc < 0) {
-            logger.warn(moduleName + " - maximum-height in config is too low!")
-            logger.warn(moduleName + " - It must be greater than 0! Using 256 instead.")
-            maximumYLoc = 256
+        if (tntDropNode.isVirtual) {
+            val comment = "Whether or not we should drop a new TNT item when we remove it"
+            tntDropNode.setComment(comment)
+            tntDropNode.value = true
         }
+
+        if (fallingDropNode.isVirtual) {
+            val comment = "Whether or not we should drop a new item of the falling block's type\n" +
+                    " when we remove it"
+            fallingDropNode.setComment(comment)
+            fallingDropNode.value = true
+        }
+
+        maxTNTHeight = tntHeightNode.int
+        maxFallingBlockHeight = fallingBlockHeightNode.int
+        shouldDropTNT = tntDropNode.boolean
+        shouldDropFallingBlock = fallingDropNode.boolean
+
+        if (isInvalidHeight(tntHeightNode)) { maxTNTHeight = 256 }
+        if (isInvalidHeight(fallingBlockHeightNode)) { maxFallingBlockHeight = 256 }
     }
 
     @Listener
@@ -81,25 +99,14 @@ class DropFallingBlocks(instanceIn: PaperSponge) : ModuleBase("Falling Block Kil
             return
         }
 
-        if (event.toTransform.location.blockY >= maximumYLoc) {
-            if (shouldDropItem) {
-                var item: ItemStack? = null
+        if (shouldRemove(entity)) {
+            val itemToDrop = getItemToDrop(entity)
 
-                if (entity is FallingBlock) {
-                    val opt = entity.blockState().get().type.item
-                    if (opt.isPresent) {
-                        item = ItemStack.of(opt.get(), 1)
-                    }
-                } else {
-                    item = ItemStack.of(ItemTypes.TNT, 1)
-                }
-
-                if (item != null) {
-                    val loc = entity.location
-                    val dropEntity = loc.extent.createEntity(EntityTypes.ITEM, loc.position)
-                    dropEntity.offer(Keys.REPRESENTED_ITEM, item.createSnapshot())
-                    loc.extent.spawnEntity(dropEntity)
-                }
+            if (itemToDrop != null) {
+                val loc = entity.location
+                val dropEntity = loc.extent.createEntity(EntityTypes.ITEM, loc.position)
+                dropEntity.offer(Keys.REPRESENTED_ITEM, itemToDrop.createSnapshot())
+                loc.extent.spawnEntity(dropEntity)
             }
 
             entity.remove()
@@ -124,4 +131,69 @@ class DropFallingBlocks(instanceIn: PaperSponge) : ModuleBase("Falling Block Kil
      * Checks that the given entity is an instance of either PrimedTNT or FallingBlock
      */
     private fun isFallingBlockOrTNT(entity: Entity): Boolean = entity is FallingBlock || entity is PrimedTNT
+
+    /**
+     * Checks whether or not we should remove the entity
+     */
+    private fun shouldRemove(entity: Entity): Boolean {
+        when (entity) {
+            is PrimedTNT -> {
+                if (maxTNTHeight != 0 && entity.location.blockY > maxTNTHeight) {
+                    return true
+                }
+            }
+
+            is FallingBlock -> {
+                if (maxFallingBlockHeight != 0 && entity.location.blockY > maxFallingBlockHeight) {
+                    return true
+                }
+            }
+        }
+
+        return false
+    }
+
+    /**
+     * Gets the item to drop
+     *
+     * Will return null if there is no item to drop
+     */
+    private fun getItemToDrop(entity: Entity): ItemStack? {
+        when (entity) {
+            is PrimedTNT -> {
+                if (shouldDropTNT) {
+                    return ItemStack.of(ItemTypes.TNT, 1)
+                }
+            }
+
+            is FallingBlock -> {
+                if (maxFallingBlockHeight != 0 && entity.location.blockY > maxFallingBlockHeight) {
+                    val opt = entity.blockState().get().type.item
+                    if (opt.isPresent) {
+                        return ItemStack.of(opt.get(), 1)
+                    }
+                }
+            }
+        }
+
+        return null
+    }
+
+    /**
+     * Checks that the given node is equal to zero or greater than zero
+     *
+     * If the node is not greater than or equal to zero, it will print out a warning
+     * and return true
+     *
+     * If the node is greater than or equal to zero, it will return false
+     */
+    private fun isInvalidHeight(node: ConfigurationNode): Boolean {
+        if (node.int < 0) {
+            logger.warn(moduleName + " - " + node.string + " is too low!")
+            logger.warn(moduleName + " - It must be greater than or equal to 0! Using 256 instead.")
+            return true
+        } else {
+            return false
+        }
+    }
 }
