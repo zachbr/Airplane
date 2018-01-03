@@ -18,19 +18,95 @@
 package com.destroystokyo.papersponge.modules.base
 
 import com.destroystokyo.papersponge.PaperSponge
+import ninja.leaping.configurate.ConfigurationNode
+import org.apache.commons.lang3.Validate
 import org.spongepowered.api.Sponge
 
 abstract class ModuleBase(moduleNameIn: String, instanceIn: PaperSponge) {
+
+    /**
+     * Friendly module name, may contain spaces
+     * @see getSerializedName
+     */
     private val moduleName = moduleNameIn
+
+    /**
+     * Instance of the main plugin class for use by modules
+     */
     protected val pluginInstance = instanceIn
+
+    /**
+     * Instance of the main plugin logger
+     */
     protected val logger = instanceIn.logger
 
-    abstract fun shouldEnable(): Boolean
+    /**
+     * Represents whether this module is enabled
+     * Only an enabled module actually does anything
+     */
+    internal var enabled: Boolean = false
 
-    fun registerModule() {
-        logger.info("Enabling " + moduleName)
-        Sponge.getEventManager().registerListeners(pluginInstance, this)
+    /**
+     * Gets whether or not this module should enable
+    */
+    private fun shouldEnable(): Boolean {
+        Validate.notNull(pluginInstance.configManager)
+        val enableNode = getModuleConfigNode().getNode("enabled")
+
+        if (enableNode.isVirtual) {
+            enableNode.value = true
+        }
+
+
+        return enableNode.boolean
     }
 
-    fun getSerializedName() = this.moduleName.replace(' ', '-')
+    /**
+     * Initializes the module
+     *
+     * It will only be enabled if set so in the config
+     */
+    internal fun initialize() {
+        if (!shouldEnable()) {
+            return
+        }
+
+        logger.info("Enabling " + moduleName)
+        enabled = true
+        Sponge.getEventManager().registerListeners(pluginInstance, this)
+        onModuleEnable()
+    }
+
+    /**
+     * Disables the module
+     */
+    internal fun disable() {
+        logger.info("Disabling module " + moduleName)
+        Sponge.getEventManager().unregisterListeners(this)
+        onModuleDisable()
+        enabled = false
+    }
+
+    /**
+     * Gets the serialized version of this module's name
+     * For use in configuration and other places where spaces would not be acceptable
+     */
+    internal fun getSerializedName() = this.moduleName.replace(' ', '-')
+
+    /**
+     * Gets the module's configuration node
+     */
+    protected fun getModuleConfigNode(): ConfigurationNode {
+        return pluginInstance.configManager!!.getNode("modules", getSerializedName()) // assert as we checked in module initialize
+    }
+
+    /**
+     * Called after the module is registered and enabled
+     */
+    protected open fun onModuleEnable() {}
+
+    /**
+     * Called before the module is disabled
+     */
+    protected open fun onModuleDisable() {}
 }

@@ -43,25 +43,24 @@ import kotlin.collections.HashSet
  * This will damage them as if they were in the void below the map
  */
 class NetherRoofDamage(instance: PaperSponge) : ModuleBase("Entity Nether Roof Damager", instance) {
-    override fun shouldEnable(): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
 
     /**
      * Damage source to use for all entity damage calls
      */
     private val damageSource = DamageSource.builder().type(DamageTypes.VOID).creative().magical().build()
+
     /**
      * List of entity UUIDs actively on the nether roof
      */
     private val entitiesOnNetherRoof = HashSet<UUID>()
+
     /**
      * List of entity UUIDs that are awaiting addition to the main list
      */
     private val awaitingAdd = HashSet<UUID>()
 
-    init {
-        submitRunnable(instance)
+    override fun onModuleEnable() {
+        submitRunnable(pluginInstance)
     }
 
     @Listener

@@ -39,9 +39,6 @@ import org.spongepowered.api.world.World
  * Commonly used in TNT cannon servers to nerf certain types of cannons
  */
 class DropFallingBlocks(instanceIn: PaperSponge) : ModuleBase("Falling Block Killer", instanceIn) {
-    override fun shouldEnable(): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
 
     private val maximumYLoc = 100 // TODO - Config Driven
     private val shouldDropItem = true // TODO - Config Driven
