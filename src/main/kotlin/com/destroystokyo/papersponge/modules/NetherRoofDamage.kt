@@ -42,7 +42,7 @@ import kotlin.collections.HashSet
  *
  * This will damage them as if they were in the void below the map
  */
-class NetherRoofDamage(instance: PaperSponge) : ModuleBase("Entity Nether Roof Damager", instance) {
+class NetherRoofDamage(instance: PaperSponge) : ModuleBase("nether-roof-damager", instance) {
 
     /**
      * Damage source to use for all entity damage calls

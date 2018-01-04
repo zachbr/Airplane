@@ -39,7 +39,7 @@ import org.spongepowered.api.world.World
  *
  * Commonly used in TNT cannon servers to nerf certain types of cannons
  */
-class DropFallingBlocks(instanceIn: PaperSponge) : ModuleBase("Falling Block Killer", instanceIn) {
+class DropFallingBlocks(instanceIn: PaperSponge) : ModuleBase("drop-falling-blocks-and-tnt", instanceIn) {
 
     private var maxTNTHeight: Int = -1
     private var maxFallingBlockHeight: Int = -1

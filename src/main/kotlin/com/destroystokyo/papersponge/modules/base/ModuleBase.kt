@@ -25,10 +25,12 @@ import org.spongepowered.api.Sponge
 abstract class ModuleBase(moduleNameIn: String, instanceIn: PaperSponge) {
 
     /**
-     * Friendly module name, may contain spaces
-     * @see getSerializedName
+     * Module name - Should be entirely lowercase and use dashes in place of spaces
+     *
+     * For example: "stricter-aquatic-mob-spawns"
+     * This is enforced because we use this module name for configuration
      */
-    internal val moduleName = moduleNameIn
+    internal val moduleName = moduleNameIn.replace(' ', '-').toLowerCase()
 
     /**
      * Instance of the main plugin class for use by modules
@@ -88,19 +90,13 @@ abstract class ModuleBase(moduleNameIn: String, instanceIn: PaperSponge) {
     }
 
     /**
-     * Gets the serialized version of this module's name
-     * For use in configuration and other places where spaces would not be acceptable
-     */
-    internal fun getSerializedName() = this.moduleName.replace(' ', '-').toLowerCase()
-
-    /**
      * Gets the top level of this module's config node
      *
      * We want the ModuleBase class to have exclusive access here so that we
      * can ensure visibility of priority nodes, ex: the enable node
      */
     private fun getTopLevelModuleConfigNode(): CommentedConfigurationNode {
-        return pluginInstance.configManager!!.getNode("modules", getSerializedName()) // assert as we checked in module initialize
+        return pluginInstance.configManager!!.getNode("modules", moduleName) // assert as we checked in module initialize
     }
 
     /**
