@@ -167,7 +167,7 @@ class DropFallingBlocks(instanceIn: PaperSponge) : ModuleBase("drop-falling-bloc
             }
 
             is FallingBlock -> {
-                if (maxFallingBlockHeight != 0 && entity.location.blockY > maxFallingBlockHeight) {
+                if (shouldDropFallingBlock) {
                     val opt = entity.blockState().get().type.item
                     if (opt.isPresent) {
                         return ItemStack.of(opt.get(), 1)
