@@ -1,26 +1,26 @@
 /*
- * This file is part of PaperSponge.
+ * This file is part of Airplane.
  *
- * PaperSponge is free software: you can redistribute it and/or modify
+ * Airplane is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * PaperSponge is distributed in the hope that it will be useful,
+ * Airplane is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with PaperSponge.  If not, see <http://www.gnu.org/licenses/>.
+ * along with Airplane.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.destroystokyo.papersponge.modules
+package com.destroystokyo.airplane.modules
 
-import com.destroystokyo.papersponge.PaperSponge
-import com.destroystokyo.papersponge.modules.base.ModuleBase
-import com.destroystokyo.papersponge.modules.util.getEntity
-import com.destroystokyo.papersponge.modules.util.movedBlockXYZ
+import com.destroystokyo.airplane.Airplane
+import com.destroystokyo.airplane.modules.base.ModuleBase
+import com.destroystokyo.airplane.modules.util.getEntity
+import com.destroystokyo.airplane.modules.util.movedBlockXYZ
 import org.spongepowered.api.entity.Entity
 import org.spongepowered.api.entity.living.Living
 import org.spongepowered.api.event.Listener
@@ -42,7 +42,7 @@ import kotlin.collections.HashSet
  *
  * This will damage them as if they were in the void below the map
  */
-class NetherRoofDamage(instance: PaperSponge) : ModuleBase("nether-roof-damager", instance) {
+class NetherRoofDamage(instance: Airplane) : ModuleBase("nether-roof-damager", instance) {
 
     /**
      * Damage source to use for all entity damage calls
@@ -108,7 +108,7 @@ class NetherRoofDamage(instance: PaperSponge) : ModuleBase("nether-roof-damager"
     /**
      * Creates and submits our damage runnable
      */
-    private fun submitRunnable(instance: PaperSponge) {
+    private fun submitRunnable(instance: Airplane) {
         val damageRunnable = java.lang.Runnable {
             entitiesOnNetherRoof += awaitingAdd
             awaitingAdd.clear()
@@ -135,7 +135,7 @@ class NetherRoofDamage(instance: PaperSponge) : ModuleBase("nether-roof-damager"
         Task.builder()
                 .interval(1, TimeUnit.SECONDS)
                 .execute(damageRunnable)
-                .name("PaperSponge - Nether Roof Damage Task")
+                .name("Airplane - Nether Roof Damage Task")
                 .submit(instance)
     }
 }

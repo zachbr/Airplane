@@ -60,12 +60,12 @@ shadowJar {
         include dependency('org.jetbrains.kotlin:kotlin-stdlib')
     }
 
-    relocate 'kotlin', 'com.destroystokyo.papersponge.libs.kotlin'
+    relocate 'kotlin', 'com.destroystokyo.airplane.libs.kotlin'
     from 'LICENSE.md'
 }
 
 // updateLicenses || checkLicenses
 license {
-    ext.name = 'PaperSponge'
+    ext.name = 'Airplane'
     header = project.file('HEADER.txt')
 }

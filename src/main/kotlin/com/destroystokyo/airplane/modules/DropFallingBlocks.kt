@@ -1,24 +1,24 @@
 /*
- * This file is part of PaperSponge.
+ * This file is part of Airplane.
  *
- * PaperSponge is free software: you can redistribute it and/or modify
+ * Airplane is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * PaperSponge is distributed in the hope that it will be useful,
+ * Airplane is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with PaperSponge.  If not, see <http://www.gnu.org/licenses/>.
+ * along with Airplane.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.destroystokyo.papersponge.modules
+package com.destroystokyo.airplane.modules
 
-import com.destroystokyo.papersponge.PaperSponge
-import com.destroystokyo.papersponge.modules.base.ModuleBase
+import com.destroystokyo.airplane.Airplane
+import com.destroystokyo.airplane.modules.base.ModuleBase
 import ninja.leaping.configurate.ConfigurationNode
 import org.spongepowered.api.data.key.Keys
 import org.spongepowered.api.entity.Entity
@@ -39,7 +39,7 @@ import org.spongepowered.api.world.World
  *
  * Commonly used in TNT cannon servers to nerf certain types of cannons
  */
-class DropFallingBlocks(instanceIn: PaperSponge) : ModuleBase("drop-falling-blocks-and-tnt", instanceIn) {
+class DropFallingBlocks(instanceIn: Airplane) : ModuleBase("drop-falling-blocks-and-tnt", instanceIn) {
 
     private var maxTNTHeight: Int = -1
     private var maxFallingBlockHeight: Int = -1
@@ -54,15 +54,15 @@ class DropFallingBlocks(instanceIn: PaperSponge) : ModuleBase("drop-falling-bloc
         val fallingDropNode = moduleNode.getNode("drop", "falling-block-items")
 
         if (tntHeightNode.isVirtual) {
-            val comment = "The height at which a TNT entity should be removed\n" +
-                    "Set to 0 to disable"
+            val comment = String.format("The height at which a TNT entity should be removed%n" +
+                    "Set to 0 to disable")
             tntHeightNode.setComment(comment)
             tntHeightNode.value = 256
         }
 
         if (fallingBlockHeightNode.isVirtual) {
-            val comment = "The height at which a falling block should be removed\n" +
-                    "Set to 0 to disable"
+            val comment = String.format("The height at which a falling block should be removed%n" +
+                    "Set to 0 to disable")
             fallingBlockHeightNode.setComment(comment)
             fallingBlockHeightNode.value = 256
         }
@@ -74,8 +74,8 @@ class DropFallingBlocks(instanceIn: PaperSponge) : ModuleBase("drop-falling-bloc
         }
 
         if (fallingDropNode.isVirtual) {
-            val comment = "Whether or not we should drop a new item of the falling block's type\n" +
-                    " when we remove it"
+            val comment = String.format("Whether or not we should drop a new item of the falling block's type%n" +
+                    " when we remove it")
             fallingDropNode.setComment(comment)
             fallingDropNode.value = true
         }

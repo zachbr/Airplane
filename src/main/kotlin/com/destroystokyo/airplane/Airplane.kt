@@ -1,27 +1,27 @@
 /*
- * This file is part of PaperSponge.
+ * This file is part of Airplane.
  *
- * PaperSponge is free software: you can redistribute it and/or modify
+ * Airplane is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * PaperSponge is distributed in the hope that it will be useful,
+ * Airplane is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with PaperSponge.  If not, see <http://www.gnu.org/licenses/>.
+ * along with Airplane.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.destroystokyo.papersponge
+package com.destroystokyo.airplane
 
-import com.destroystokyo.papersponge.config.Configuration
-import com.destroystokyo.papersponge.modules.AquaticMobSpawns
-import com.destroystokyo.papersponge.modules.DropFallingBlocks
-import com.destroystokyo.papersponge.modules.NetherRoofDamage
-import com.destroystokyo.papersponge.modules.base.ModuleBase
+import com.destroystokyo.airplane.config.Configuration
+import com.destroystokyo.airplane.modules.AquaticMobSpawns
+import com.destroystokyo.airplane.modules.DropFallingBlocks
+import com.destroystokyo.airplane.modules.NetherRoofDamage
+import com.destroystokyo.airplane.modules.base.ModuleBase
 import com.google.inject.Inject
 import org.apache.commons.lang3.Validate
 import org.slf4j.Logger
@@ -34,8 +34,8 @@ import org.spongepowered.api.event.game.state.GameStoppedServerEvent
 import org.spongepowered.api.plugin.Plugin
 import java.nio.file.Path
 
-@Plugin(id = "papersponge", name = "PaperSponge", url = "https://github.com/zachbr/PaperSponge")
-class PaperSponge {
+@Plugin(id = "airplane", name = "Airplane", url = "https://github.com/zachbr/Airplane")
+class Airplane {
 
     @Inject internal lateinit var logger: Logger
     @Inject private lateinit var game: Game
@@ -50,13 +50,13 @@ class PaperSponge {
     private val activeModules: ArrayList<ModuleBase> = ArrayList()
 
     /**
-     * PaperSponge's configuration manager for use throughout modules and the plugin
+     * Airplane's configuration manager for use throughout modules and the plugin
      */
     internal var configManager: Configuration? = null
 
     @Listener
     fun onServerStart(event: GameStartedServerEvent) {
-        logger.info("Enabling PaperSponge")
+        logger.info("Enabling Airplane")
 
         // Because we cannot lateinit the configPath, we have to assign the config manager here in server start
         // which means elvis operators all over the place :(
@@ -69,14 +69,14 @@ class PaperSponge {
 
     @Listener
     fun onServerStop(event: GameStoppedServerEvent) {
-        logger.info("Disabling PaperSponge")
+        logger.info("Disabling Airplane")
         activeModules.forEach { it.disable() }
         configManager?.saveConfig()
     }
 
     @Listener
     fun onReloadRequest(event: GameReloadEvent) {
-        logger.info("Reloading PaperSponge")
+        logger.info("Reloading Airplane")
         disableAllModules()
         configManager?.readConfig()
         initializeModules()

@@ -1,23 +1,23 @@
 /*
- * This file is part of PaperSponge.
+ * This file is part of Airplane.
  *
- * PaperSponge is free software: you can redistribute it and/or modify
+ * Airplane is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * PaperSponge is distributed in the hope that it will be useful,
+ * Airplane is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with PaperSponge.  If not, see <http://www.gnu.org/licenses/>.
+ * along with Airplane.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.destroystokyo.papersponge.config
+package com.destroystokyo.airplane.config
 
-import com.destroystokyo.papersponge.PaperSponge
+import com.destroystokyo.airplane.Airplane
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader
 import org.apache.commons.lang3.Validate
 import java.io.IOException
@@ -28,10 +28,10 @@ import ninja.leaping.configurate.commented.CommentedConfigurationNode
 import ninja.leaping.configurate.loader.HeaderMode
 
 
-class Configuration(pluginIn: PaperSponge, pathIn: Path) {
+class Configuration(pluginIn: Airplane, pathIn: Path) {
 
     /**
-     * The config file for use by PaperSponge
+     * The config file for use by Airplane
      */
     private val configPath = pathIn
 
@@ -51,7 +51,7 @@ class Configuration(pluginIn: PaperSponge, pathIn: Path) {
     private var rootNode: SimpleCommentedConfigurationNode? = null
 
     /**
-     * Reads PaperSponge's shared configuration file
+     * Reads Airplane's shared configuration file
      * Must be called on enable, before modules can start reading from their nodes
      */
     internal fun readConfig(): Boolean {
@@ -63,7 +63,7 @@ class Configuration(pluginIn: PaperSponge, pathIn: Path) {
         try {
             rootNode = SimpleCommentedConfigurationNode.root(ConfigurationOptions.defaults().setHeader(getHeader()))
         } catch (ex: IOException) {
-            pluginInstance.logger.error("Could not load PaperSponge configuration!")
+            pluginInstance.logger.error("Could not load Airplane configuration!")
             ex.printStackTrace()
             return false
         }
@@ -78,7 +78,7 @@ class Configuration(pluginIn: PaperSponge, pathIn: Path) {
         try {
             configurationLoader?.save(rootNode)
         } catch (ex: IOException) {
-            pluginInstance.logger.error("Could not save PaperSponge configuration!")
+            pluginInstance.logger.error("Could not save Airplane configuration!")
             ex.printStackTrace()
             return false
         }
@@ -100,11 +100,11 @@ class Configuration(pluginIn: PaperSponge, pathIn: Path) {
      * Gets the super serious and entirely professional header for the config
      */
     private fun getHeader(): String {
-        return "______  ___  ______ ___________  ___________ _____ _   _ _____  _____\n" +
-                "| ___ \\/ _ \\ | ___ \\  ___| ___ \\/  ___| ___ \\  _  | \\ | |  __ \\|  ___|\n" +
-                "| |_/ / /_\\ \\| |_/ / |__ | |_/ /\\ `--.| |_/ / | | |  \\| | |  \\/| |__\n" +
-                "|  __/|  _  ||  __/|  __||    /  `--. \\  __/| | | | . ` | | __ |  __|\n" +
-                "| |   | | | || |   | |___| |\\ \\ /\\__/ / |   \\ \\_/ / |\\  | |_\\ \\| |___\n" +
-                "\\_|   \\_| |_/\\_|   \\____/\\_| \\_|\\____/\\_|    \\___/\\_| \\_/\\____/\\____/"
+        return String.format(".------..------..------..------..------..------..------..------.%n" +
+                "|A.--. ||I.--. ||R.--. ||P.--. ||L.--. ||A.--. ||N.--. ||E.--. |%n" +
+                "| (\\/) || (\\/) || :(): || :/\\: || :/\\: || (\\/) || :(): || (\\/) |%n" +
+                "| :\\/: || :\\/: || ()() || (__) || (__) || :\\/: || ()() || :\\/: |%n" +
+                "| '--'A|| '--'I|| '--'R|| '--'P|| '--'L|| '--'A|| '--'N|| '--'E|%n" +
+                "`------'`------'`------'`------'`------'`------'`------'`------'")
     }
 }
