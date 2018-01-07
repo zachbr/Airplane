@@ -1,8 +1,13 @@
-# Airplane
+Airplane [![Build Status](https://ci.destroystokyo.com/job/Airplane/badge/icon)](https://ci.destroystokyo.com/job/Airplane)
+========
 This plugin ports a number of Paper-Server gameplay changes to Sponge, implemented as a Sponge-API plugin.
 
 I am not sure how far I am going to take this. Currently I want to avoid mixins and stick to Sponge-API, though
 that may change in the future. This was mostly an excuse to play with Sponge-API and kotlin.
+
+[Sponge Ore Page](https://ore.spongepowered.org/Z750/Airplane)
+
+[Continuous Integration](https://ci.destroystokyo.com/job/Airplane/)
 
 ## Modules
 All changes are implemented as individual modules. Each module has its own global on/off switch and some
