@@ -53,6 +53,10 @@ artifacts {
     shadowJar
 }
 
+jar {
+    archivesBaseName = pluginId
+}
+
 shadowJar {
     classifier = null
 
