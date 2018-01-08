@@ -50,12 +50,12 @@ class NetherRoofDamage(instance: Airplane) : ModuleBase("nether-roof-damager", i
     private val damageSource = DamageSource.builder().type(DamageTypes.VOID).creative().magical().build()
 
     /**
-     * List of entity UUIDs actively on the nether roof
+     * Entity UUIDs actively on the nether roof
      */
     private val entitiesOnNetherRoof = HashSet<UUID>()
 
     /**
-     * List of entity UUIDs that are awaiting addition to the main list
+     * Entity UUIDs that are awaiting addition to the main list
      */
     private val awaitingAdd = HashSet<UUID>()
 

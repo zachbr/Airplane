@@ -47,7 +47,7 @@ class Airplane {
     /**
      * Collection of all active modules
      */
-    private val activeModules: ArrayList<ModuleBase> = ArrayList()
+    private val activeModules = ArrayList<ModuleBase>()
 
     /**
      * Airplane's configuration manager for use throughout modules and the plugin
@@ -70,8 +70,7 @@ class Airplane {
     @Listener
     fun onServerStop(event: GameStoppedServerEvent) {
         logger.info("Disabling Airplane")
-        activeModules.forEach { it.disable() }
-        configManager?.saveConfig()
+        disableAllModules()
     }
 
     @Listener
@@ -88,7 +87,7 @@ class Airplane {
      * Each module will handle its own registration, including whether or not it's actually enabled
      */
     private fun initializeModules() {
-        val modules: ArrayList<ModuleBase> = ArrayList()
+        val modules = ArrayList<ModuleBase>()
         modules.add(AquaticMobSpawns(this))
         modules.add(DropFallingBlocks(this))
         modules.add(NetherRoofDamage(this))
