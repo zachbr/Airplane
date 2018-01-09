@@ -21,6 +21,7 @@ import com.destroystokyo.airplane.Airplane
 import com.destroystokyo.airplane.modules.base.ModuleBase
 import com.destroystokyo.airplane.modules.util.getEntity
 import com.destroystokyo.airplane.modules.util.movedBlockXYZ
+import org.spongepowered.api.Sponge
 import org.spongepowered.api.entity.Entity
 import org.spongepowered.api.entity.living.Living
 import org.spongepowered.api.event.Listener
@@ -59,8 +60,17 @@ class NetherRoofDamage(instance: Airplane) : ModuleBase("nether-roof-damager", i
      */
     private val awaitingAdd = HashSet<UUID>()
 
+    /**
+     * Task used to damage entities, assigned when submitted
+     */
+    private var damageTask: Task? = null
+
     override fun onModuleEnable() {
         submitRunnable(pluginInstance)
+    }
+
+    override fun onModuleDisable() {
+        damageTask?.cancel()
     }
 
     @Listener
@@ -132,7 +142,7 @@ class NetherRoofDamage(instance: Airplane) : ModuleBase("nether-roof-damager", i
             }
         }
 
-        Task.builder()
+        damageTask = Task.builder()
                 .interval(1, TimeUnit.SECONDS)
                 .execute(damageRunnable)
                 .name("Airplane - Nether Roof Damage Task")
